@@ -97,3 +97,12 @@ targets:
       - Tests
     dependencies:
       - target: Shared
+
+schemes:
+  Tests:
+    build:
+      targets:
+        Tests: all
+    test:
+      targets:
+        - Tests

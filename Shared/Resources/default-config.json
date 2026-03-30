@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "global": {
+    "fontFamily": "SF Mono",
+    "fontSize": 13,
+    "lineHeight": 1.5,
+    "showLineNumbers": true,
+    "imageTimeoutSeconds": 3
+  },
+  "fileTypes": {
+    "txt": {
+      "showLineNumbers": false,
+      "syntaxHighlight": false
+    },
+    "log": {
+      "syntaxHighlight": true,
+      "logLevelPatterns": {
+        "error": "\\b(ERROR|FATAL|CRITICAL)\\b",
+        "warn": "\\b(WARN|WARNING)\\b",
+        "info": "\\b(INFO)\\b",
+        "debug": "\\b(DEBUG|TRACE)\\b"
+      }
+    }
+  }
+}
