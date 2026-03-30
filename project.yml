@@ -1,0 +1,97 @@
+name: AllYouNeedQuickLook
+options:
+  deploymentTarget:
+    macOS: "15.0"
+  bundleIdPrefix: com.yohanpark
+  xcodeVersion: "16.0"
+  groupSortPosition: top
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MACOSX_DEPLOYMENT_TARGET: "15.0"
+    CODE_SIGN_IDENTITY: "-"
+    CODE_SIGNING_REQUIRED: "NO"
+    CODE_SIGNING_ALLOWED: "NO"
+    CODE_SIGN_STYLE: Manual
+
+targets:
+  AllYouNeedQuickLook:
+    type: application
+    platform: macOS
+    sources:
+      - AllYouNeedQuickLook
+    dependencies:
+      - target: Shared
+      - target: QuickLookExtension
+        embed: true
+        codeSign: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.yohanpark.AllYouNeedQuickLook
+        GENERATE_INFOPLIST_FILE: "YES"
+        INFOPLIST_KEY_CFBundleDisplayName: "All You Need QuickLook"
+    entitlements:
+      path: AllYouNeedQuickLook/AllYouNeedQuickLook.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.application-groups:
+          - group.com.yohanpark.AllYouNeedQuickLook
+
+  QuickLookExtension:
+    type: app-extension
+    platform: macOS
+    sources:
+      - QuickLookExtension
+    dependencies:
+      - target: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.yohanpark.AllYouNeedQuickLook.QuickLookExtension
+    info:
+      path: QuickLookExtension/Info.plist
+      properties:
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.quicklook.preview
+          NSExtensionPrincipalClass: "$(PRODUCT_MODULE_NAME).PreviewViewController"
+        UTExportedTypeDeclarations:
+          - UTTypeIdentifier: org.jupyter.notebook
+            UTTypeDescription: Jupyter Notebook
+            UTTypeConformsTo:
+              - public.json
+            UTTypeTagSpecification:
+              public.filename-extension:
+                - ipynb
+        QLSupportedContentTypes:
+          - public.plain-text
+          - net.daringfireball.markdown
+          - org.jupyter.notebook
+        NSAppTransportSecurity:
+          NSAllowsArbitraryLoads: true
+    entitlements:
+      path: QuickLookExtension/QuickLookExtension.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.network.client: true
+        com.apple.security.application-groups:
+          - group.com.yohanpark.AllYouNeedQuickLook
+
+  Shared:
+    type: framework
+    platform: macOS
+    sources:
+      - Shared
+    resources:
+      - Shared/Resources/**
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: "YES"
+        PRODUCT_BUNDLE_IDENTIFIER: com.yohanpark.AllYouNeedQuickLook.Shared
+
+  Tests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - Tests
+    dependencies:
+      - target: Shared
